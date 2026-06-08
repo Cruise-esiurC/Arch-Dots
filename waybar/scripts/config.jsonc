@@ -11,7 +11,6 @@
   "modules-right": [
     "tray",
     "wireplumber",
-    "backlight",
     "battery",
     "mpris",
     "clock",
@@ -52,12 +51,6 @@
       "headphones": "󰋋",
       "headset": "󰋎"
     }
-  },
-
-  "backlight": {
-    "device": "intel_backlight",
-    "format": " {icon} {percent}% ",
-    "format-icons": ["󰃞", "󰃟", "󰃠"]
   },
 
   "battery": {
