@@ -1,0 +1,83 @@
+-- hyprland.lua
+-- Converted from hyprland.conf
+-- Requires Hyprland 0.55+
+-- Ref: https://wiki.hypr.land/Configuring/Start/
+
+-- ── Monitor ───────────────────────────────────────────────────────────────────
+
+hl.monitor({
+    output   = "DP-2",
+    mode     = "2560x1440@170",
+    position = "0x0",
+    scale    = 1,
+})
+
+-- ── Variables ─────────────────────────────────────────────────────────────────
+
+local mainMod     = "SUPER"
+local terminal    = "kitty"
+local fileManager = "kitty -e yazi"
+local menu        = "rofi -show drun"
+local browser     = "zen-browser"
+
+-- ── Environment variables ─────────────────────────────────────────────────────
+-- Note: prefer ~/.config/uwsm/env for GTK/Qt vars if using uwsm
+
+hl.env("GTK_THEME",            "Adwaita-dark")
+hl.env("QT_QPA_PLATFORMTHEME", "qt5ct")
+hl.env("QT_STYLE_OVERRIDE",    "kvantum")
+hl.env("XDG_CURRENT_DESKTOP",  "Hyprland")
+
+-- ── Autostart ─────────────────────────────────────────────────────────────────
+
+hl.on("hyprland.start", function()
+    hl.exec_cmd("systemctl --user enable --now hyprpaper.service")
+    hl.exec_cmd("hyprpaper -c ~/.config/hypr/hyprpaper.conf")
+    hl.exec_cmd("powerprofilesctl set performance")
+    hl.exec_cmd("waybar")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'")
+    hl.exec_cmd("gsettings set org.gnome.desktop.interface gtk-theme 'Adwaita-dark'")
+end)
+
+-- ── Animations ────────────────────────────────────────────────────────────────
+
+hl.config({
+    animations = {
+        enabled = true,
+    },
+})
+
+hl.curve("fluid", { type = "bezier", points = { {0.25, 1}, {0.5, 1} } })
+
+hl.animation({ leaf = "windows",    enabled = true, speed = 3,   bezier = "fluid",   style = "popin 100%" })
+hl.animation({ leaf = "windowsOut", enabled = true, speed = 4,   bezier = "fluid",   style = "popin 100%" })
+hl.animation({ leaf = "border",     enabled = true, speed = 5,   bezier = "default" })
+hl.animation({ leaf = "fade",       enabled = true, speed = 4,   bezier = "default" })
+hl.animation({ leaf = "workspaces", enabled = true, speed = 3.5, bezier = "fluid",   style = "slide" })
+
+-- ── Keybinds ──────────────────────────────────────────────────────────────────
+
+-- App launchers
+hl.bind(mainMod .. " + return", hl.dsp.exec_cmd(terminal))
+hl.bind("ALT + F4",             hl.dsp.window.close())
+hl.bind(mainMod .. " + M",      hl.dsp.exec_cmd("command -v hyprshutdown >/dev/null 2>&1 && hyprshutdown || hyprctl dispatch exit"))
+hl.bind(mainMod .. " + E",      hl.dsp.exec_cmd(fileManager))
+hl.bind(mainMod .. " + SHIFT + F", hl.dsp.window.float({ action = "toggle" }))
+hl.bind(mainMod .. " + D",      hl.dsp.exec_cmd(menu))
+hl.bind(mainMod .. " + F",      hl.dsp.exec_cmd(browser))
+
+-- Screenshot
+hl.bind(mainMod .. " + SHIFT + S", hl.dsp.exec_cmd(
+    "grim -g \"$(slurp)\" - | tee ~/Pictures/Screenshots/$(date +'%Y-%m-%d_%H-%M-%S').png | wl-copy"
+))
+
+-- Switch workspaces and move windows (1–10)
+for i = 1, 10 do
+    local key = i % 10  -- key 0 = workspace 10
+    hl.bind(mainMod .. " + " .. key,           hl.dsp.focus({ workspace = i }))
+    hl.bind(mainMod .. " + SHIFT + " .. key,   hl.dsp.window.move({ workspace = i }))
+end
+
+-- Mouse binds
+hl.bind("ALT + mouse:272",   hl.dsp.window.resize(), { mouse = true })
+hl.bind("SUPER + mouse:272", hl.dsp.window.drag(),   { mouse = true })
