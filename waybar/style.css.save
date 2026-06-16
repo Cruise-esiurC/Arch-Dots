@@ -47,12 +47,3 @@ window#waybar {
 
 #battery.warning { color: @warn; }
 #battery.critical { color: @urgent; }
-
-#custom-cpucat {
-  font-family: "Waycat", monospace;
-  font-size: 32px;
-  font-weight: bold;
-  color: @fg;
-  padding-left: 8px;
-  padding-right: 8px;
-}
