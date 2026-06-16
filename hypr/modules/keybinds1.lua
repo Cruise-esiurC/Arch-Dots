@@ -33,20 +33,6 @@ function M.setup(vars)
         hl.bind(mod .. " + SHIFT + " .. key,   hl.dsp.window.move({ workspace = i }))
     end
 
-    -- ── Focus movement (SUPER + arrow keys) ───────────────────────────────────
-
-    hl.bind(mod .. " + left",  hl.dsp.focus({ direction = "l" }))
-    hl.bind(mod .. " + right", hl.dsp.focus({ direction = "r" }))
-    hl.bind(mod .. " + up",    hl.dsp.focus({ direction = "u" }))
-    hl.bind(mod .. " + down",  hl.dsp.focus({ direction = "d" }))
-
-    -- ── Move windows (SUPER + SHIFT + arrow keys) ─────────────────────────────
-
-    hl.bind(mod .. " + SHIFT + left",  hl.dsp.window.move({ direction = "l" }))
-    hl.bind(mod .. " + SHIFT + right", hl.dsp.window.move({ direction = "r" }))
-    hl.bind(mod .. " + SHIFT + up",    hl.dsp.window.move({ direction = "u" }))
-    hl.bind(mod .. " + SHIFT + down",  hl.dsp.window.move({ direction = "d" }))
-
     -- ── Mouse binds ────────────────────────────────────────────────────────────
 
     hl.bind("ALT + mouse:272",   hl.dsp.window.resize(), { mouse = true })
